@@ -1,22 +1,25 @@
-<script setup>
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import { Link } from '@inertiajs/vue3';
-</script>
-
 <template>
     <div
-        class="flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0"
+        class="flex flex-col justify-center flex-1 min-h-full px-6 py-12 lg:px-8"
     >
-        <div>
-            <Link href="/">
-                <ApplicationLogo class="h-20 w-20 fill-current text-gray-500" />
-            </Link>
+        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+            <h2
+                class="mt-10 font-bold tracking-tight text-center text-gray-900 text-2xl/9"
+            >
+                {{ title }}
+            </h2>
         </div>
 
-        <div
-            class="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg"
-        >
-            <slot />
+        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            <slot></slot>
         </div>
     </div>
 </template>
+
+<script setup>
+defineProps({
+    title: String,
+});
+
+const emit = defineEmits(["submit"]);
+</script>
