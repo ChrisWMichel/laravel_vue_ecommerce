@@ -1,13 +1,15 @@
 <template>
-    <div class="grid grid-cols-[200px_1fr] min-h-screen bg-gray-200">
+    <div class="flex min-h-screen bg-gray-200">
         <!-- Sidebar -->
-        <sidebar />
+        <transition name="slide">
+            <sidebar v-if="sidebarOpen" />
+        </transition>
         <!-- Sidebar -->
         <div class="flex-1">
             <!-- content -->
-            <header-app />
+            <navBar @toggle-sidebar="toggleSidebar" />
             <main class="flex-1 p-6 bg-gray-100">
-                <div class="p-4 bg-white rounded shadow">
+                <div class="flex min-h-screen p-4 bg-gray-200">
                     <router-view />
                 </div>
             </main>
@@ -17,9 +19,40 @@
 </template>
 
 <script setup>
-//class="flex flex-col justify-center flex-1 min-h-full px-6 py-12 lg:px-8"
 import sidebar from "@/Components/sidebar.vue";
-import headerApp from "@/Components/headerApp.vue";
+import navBar from "@/Components/NavBar.vue";
+import { ref, onMounted, onUnmounted } from "vue";
+
+let sidebarOpen = ref(true);
+
+const toggleSidebar = () => {
+    sidebarOpen.value = !sidebarOpen.value;
+};
+
+onMounted(() => {
+    window.addEventListener("resize", resizeHandler);
+});
+
+onUnmounted(() => {
+    window.removeEventListener("resize", resizeHandler);
+});
+
+const resizeHandler = () => {
+    if (window.outerWidth <= 768) {
+        sidebarOpen.value = false;
+    } else {
+        sidebarOpen.value = true;
+    }
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+.slide-enter-active,
+.slide-leave-active {
+    transition: transform 0.3s ease;
+}
+.slide-enter,
+.slide-leave-to {
+    transform: translateX(-100%);
+}
+</style>
